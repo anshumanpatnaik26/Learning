@@ -1,0 +1,83 @@
+table 'Sales Customer'
+	lineageTag: 1872bc6b-96f5-4618-82c2-0bff58a5f1fc
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: ab92142b-baed-4d44-95b7-890bc409a4f4
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column PersonID
+		dataType: int64
+		formatString: 0
+		lineageTag: d545512c-eba8-4d61-a059-d445a17af891
+		summarizeBy: count
+		sourceColumn: PersonID
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreID
+		dataType: int64
+		formatString: 0
+		lineageTag: f46a7331-e7e1-4d7c-9a7b-97d2c47d598e
+		summarizeBy: count
+		sourceColumn: StoreID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TerritoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: dabc79b9-ef62-4743-bff7-9616e34259fc
+		summarizeBy: count
+		sourceColumn: TerritoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountNumber
+		dataType: string
+		lineageTag: 04ae252c-bfb1-4b51-898f-ea51de069746
+		summarizeBy: none
+		sourceColumn: AccountNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column rowguid
+		dataType: string
+		lineageTag: fadfc821-54ef-4f27-a4c1-6cf86b18eb3b
+		summarizeBy: none
+		sourceColumn: rowguid
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1c2856e7-bc1c-4392-abfd-db6968901b45
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		variation Variation
+			isDefault
+			relationship: 36ca4632-e767-4656-8e83-8dce8e937ab7
+			defaultHierarchy: LocalDateTable_277a4f5c-7e66-417d-b6b0-ab4ff7dd0304.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales Customer' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ASUSEXPERTBOOK\SQLEXPRESS"),
+				    AdventureWorks2025 = Source{[Name="AdventureWorks2025"]}[Data],
+				    Sales_Customer = AdventureWorks2025{[Schema="Sales",Item="Customer"]}[Data]
+				in
+				    Sales_Customer
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,343 @@
+table 'Sales SalesOrderHeader'
+	lineageTag: 6e93b7a3-fd2a-4ad3-b536-831819e748e2
+
+	measure 'Total Sales' = SUM('Sales SalesOrderDetail'[LineTotal])
+		formatString: $#,##0
+		lineageTag: 91477789-7db5-408f-ad73-99621e39425b
+
+	measure 'Total Revenue (incl Tax & Freight)' = SUM('Sales SalesOrderHeader'[TotalDue])
+		formatString: $#,##0
+		lineageTag: 2574f7f8-73d0-46a4-bab8-698635dcf514
+
+	measure 'Total Orders' = DISTINCTCOUNT('Sales SalesOrderHeader'[SalesOrderID])
+		formatString: #,##0
+		lineageTag: ea0132c8-1dd3-4e32-b991-5103662e0f8f
+
+	measure 'Total Customers' = DISTINCTCOUNT('Sales SalesOrderHeader'[CustomerID])
+		formatString: #,##0
+		lineageTag: 4883d695-68f7-4562-9124-2c2b6627a651
+
+	measure 'Total Units Sold' = SUM('Sales SalesOrderDetail'[OrderQty])
+		formatString: #,##0
+		lineageTag: b8a6e9de-ca6c-4400-8639-bbe1e5b4efad
+
+	measure 'Avg Order Value' = DIVIDE([Total Sales], [Total Orders])
+		formatString: $#,##0
+		lineageTag: 976eba1a-0050-4f1f-b7fc-3eae01673cdb
+
+	measure 'Avg Selling Price' = DIVIDE([Total Sales], [Total Units Sold])
+		formatString: $#,##0.00
+		lineageTag: 0b9e07a3-d956-423b-a8ab-beac5f6189c7
+
+	measure 'Total Cost' = SUMX('Sales SalesOrderDetail', 'Sales SalesOrderDetail'[OrderQty] * RELATED('Production Product'[StandardCost]))
+		formatString: $#,##0
+		lineageTag: d71f5931-9b60-4445-9f1d-9cf209331754
+
+	measure 'Gross Profit' = [Total Sales] - [Total Cost]
+		formatString: $#,##0
+		lineageTag: f1ca3f7a-5356-4a7a-b218-d4650ba12228
+
+	measure 'Gross Margin %' = DIVIDE([Gross Profit], [Total Sales])
+		formatString: 0.0%
+		lineageTag: f10dd1b1-7e81-40e3-acfa-caba673f57a1
+
+	measure 'Sales YTD' = CALCULATE([Total Sales], DATESYTD('Calendar'[Date]))
+		formatString: $#,##0
+		lineageTag: 650d9e5f-c849-45d7-8ca3-54eba8a04f10
+
+	measure 'Sales PY' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Calendar'[Date]))
+		formatString: $#,##0
+		lineageTag: 2bf8d7c7-ec34-4148-a548-39193b887188
+
+	measure 'Sales YoY %' = DIVIDE([Total Sales] - [Sales PY], [Sales PY])
+		formatString: 0.0%
+		lineageTag: c12a8ad7-2cd3-42c3-8116-01bc18b8d501
+
+	measure 'Sales MTD' = CALCULATE([Total Sales], DATESMTD('Calendar'[Date]))
+		formatString: $#,##0
+		lineageTag: 3928215b-9d85-4b9d-9538-6620a368ca01
+
+	measure '% of Total Sales' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL('Production ProductCategory')))
+		formatString: 0.0%
+		lineageTag: 64e2fd4c-1f04-4a8b-8346-b68386061347
+
+	measure 'Sales per Customer' = DIVIDE([Total Sales], CALCULATE(DISTINCTCOUNT('Sales SalesOrderHeader'[CustomerID])))
+		formatString: $#,##0
+		lineageTag: 19d587e4-2135-47c2-a3b9-749ed8c407de
+
+	measure 'Online Orders' = CALCULATE(DISTINCTCOUNT('Sales SalesOrderHeader'[SalesOrderID]), 'Sales SalesOrderHeader'[OnlineOrderFlag] = TRUE)
+		formatString: #,##0
+		lineageTag: ab5d6458-3679-4d8b-b217-be675749a1f5
+
+	measure 'Online Order %' = DIVIDE([Online Orders], [Total Orders])
+		formatString: 0.0%
+		lineageTag: 3c943e77-327b-4717-9501-f1b35b3b95ed
+
+	column SalesOrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3985d910-4de7-4d0c-966d-64a8bfac7cb5
+		summarizeBy: none
+		sourceColumn: SalesOrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column RevisionNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: cdf4a593-8bbf-4d35-b5fc-5d5bca6fbacc
+		summarizeBy: sum
+		sourceColumn: RevisionNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e77d2eff-f586-46f1-b917-c513b0b1d5ec
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		variation Variation
+			isDefault
+			relationship: 52deb488-b5ed-42ec-b445-c9d3081f0a3e
+			defaultHierarchy: LocalDateTable_367d5f58-81d9-45ca-9a84-d69cca0c8201.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column DueDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: ad6b4e0a-99e5-474a-9ea1-8a16d39d62a6
+		summarizeBy: none
+		sourceColumn: DueDate
+
+		variation Variation
+			isDefault
+			relationship: 595a0307-7d7c-467e-8ff7-ae4140caf19c
+			defaultHierarchy: LocalDateTable_58943af9-8d31-4453-8346-0150c12d3ba2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 394fb71a-4c18-4b86-a66e-4ccc6ba0eba7
+		summarizeBy: none
+		sourceColumn: ShipDate
+
+		variation Variation
+			isDefault
+			relationship: 18822019-451a-4c5b-9593-c6fa147ebedd
+			defaultHierarchy: LocalDateTable_a387e54b-d52b-4513-9244-214db6490205.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: int64
+		formatString: 0
+		lineageTag: 295a7f84-5fd4-4402-a711-1ff21b6e1a0f
+		summarizeBy: sum
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column OnlineOrderFlag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8e141c01-f2e8-4d1a-b3f9-2345c1dc9d2d
+		summarizeBy: none
+		sourceColumn: OnlineOrderFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderNumber
+		dataType: string
+		lineageTag: 9f4f6ecc-d91d-48b9-898c-7d647161cfbd
+		summarizeBy: none
+		sourceColumn: SalesOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchaseOrderNumber
+		dataType: string
+		lineageTag: cde4893a-285a-49a8-b816-3a6a0c257198
+		summarizeBy: none
+		sourceColumn: PurchaseOrderNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountNumber
+		dataType: string
+		lineageTag: 803983ca-9c79-4c02-9a72-aeefa3cc97e6
+		summarizeBy: none
+		sourceColumn: AccountNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2cda2dd5-dc0c-4f00-bbd8-e258b63c8cca
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesPersonID
+		dataType: int64
+		formatString: 0
+		lineageTag: ef1275d7-8f15-4fdf-8829-e97e22a5dd89
+		summarizeBy: count
+		sourceColumn: SalesPersonID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TerritoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: e66b87f7-b4f1-46d9-b0bd-3a74bafe1ec0
+		summarizeBy: count
+		sourceColumn: TerritoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column BillToAddressID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ac658c1-e819-4910-a28d-adff4cb0e27d
+		summarizeBy: count
+		sourceColumn: BillToAddressID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipToAddressID
+		dataType: int64
+		formatString: 0
+		lineageTag: 7c034aad-8eb3-40b4-81b7-af4044e18a59
+		summarizeBy: count
+		sourceColumn: ShipToAddressID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ShipMethodID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4bc75be3-f5af-4080-836c-9760ac4257f6
+		summarizeBy: count
+		sourceColumn: ShipMethodID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreditCardID
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b0f686f-a585-45ce-9a46-d15c8b0aad9a
+		summarizeBy: count
+		sourceColumn: CreditCardID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CreditCardApprovalCode
+		dataType: string
+		lineageTag: 26b2b24b-6e5a-481d-9fad-135eae7636bb
+		summarizeBy: none
+		sourceColumn: CreditCardApprovalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyRateID
+		dataType: int64
+		formatString: 0
+		lineageTag: a2518965-c808-4a68-b2de-4a59626b3600
+		summarizeBy: count
+		sourceColumn: CurrencyRateID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubTotal
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 9eb98094-0a94-4123-8d3a-2e889d7cb2ef
+		summarizeBy: sum
+		sourceColumn: SubTotal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column TaxAmt
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: b2f75d87-af67-484c-a686-9dca0b1bea8e
+		summarizeBy: sum
+		sourceColumn: TaxAmt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column Freight
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 7c18339f-9318-4612-b2c3-ac1c2e702456
+		summarizeBy: sum
+		sourceColumn: Freight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column TotalDue
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 20c23f3b-818a-490b-b1a0-515f30f267af
+		summarizeBy: sum
+		sourceColumn: TotalDue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column Comment
+		dataType: string
+		lineageTag: e2ec470d-0a78-47d0-8e61-a98415aff55f
+		summarizeBy: none
+		sourceColumn: Comment
+
+		annotation SummarizationSetBy = Automatic
+
+	column rowguid
+		dataType: string
+		lineageTag: 3df38564-df6b-483b-9206-38634c1c98c1
+		summarizeBy: none
+		sourceColumn: rowguid
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 802c76ed-d2de-4788-9b8a-b1567757defc
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		variation Variation
+			isDefault
+			relationship: dade5174-8397-4e94-b254-b4d43a983d34
+			defaultHierarchy: LocalDateTable_6cb030d6-d213-4df9-ad7d-28d09043e1c7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales SalesOrderHeader' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ASUSEXPERTBOOK\SQLEXPRESS"),
+				    AdventureWorks2025 = Source{[Name="AdventureWorks2025"]}[Data],
+				    Sales_SalesOrderHeader = AdventureWorks2025{[Schema="Sales",Item="SalesOrderHeader"]}[Data]
+				in
+				    Sales_SalesOrderHeader
+
+	annotation PBI_ResultType = Table
+

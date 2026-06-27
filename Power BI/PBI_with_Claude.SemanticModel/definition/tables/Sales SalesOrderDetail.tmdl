@@ -1,0 +1,122 @@
+table 'Sales SalesOrderDetail'
+	lineageTag: 03aba738-124d-494e-aed2-de1faf423bd8
+
+	column SalesOrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ce6eb8c-99a5-423c-a89f-ab439f1b8f86
+		summarizeBy: none
+		sourceColumn: SalesOrderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SalesOrderDetailID
+		dataType: int64
+		formatString: 0
+		lineageTag: 019bd9d5-f18f-4851-9266-9103c3600029
+		summarizeBy: count
+		sourceColumn: SalesOrderDetailID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CarrierTrackingNumber
+		dataType: string
+		lineageTag: 07ed4415-d54e-4a40-b012-19d7929232bc
+		summarizeBy: none
+		sourceColumn: CarrierTrackingNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderQty
+		dataType: int64
+		formatString: 0
+		lineageTag: 12bbd8b7-01c1-49cc-8ed2-642476a69400
+		summarizeBy: sum
+		sourceColumn: OrderQty
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: cd386334-a092-413f-8857-5673209d1c8b
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SpecialOfferID
+		dataType: int64
+		formatString: 0
+		lineageTag: 4e774a7e-3437-4256-a34a-c0e63868f3ea
+		summarizeBy: count
+		sourceColumn: SpecialOfferID
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 864f1da2-781d-4a61-a1f7-2dddfcbf0c75
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column UnitPriceDiscount
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 49cc437c-b498-44bb-9783-1fed3518b0b5
+		summarizeBy: sum
+		sourceColumn: UnitPriceDiscount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	column LineTotal
+		dataType: double
+		lineageTag: fa1fccd7-13df-44a6-a0e6-c1bed9ecab58
+		summarizeBy: sum
+		sourceColumn: LineTotal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column rowguid
+		dataType: string
+		lineageTag: fc413bc5-e798-4110-9c0e-e8859915b0f6
+		summarizeBy: none
+		sourceColumn: rowguid
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 6b608780-c099-4003-9e2b-f6be8b59cbc3
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		variation Variation
+			isDefault
+			relationship: 46ff188c-f454-40e3-8f55-e81e87546237
+			defaultHierarchy: LocalDateTable_22637f17-08d6-400d-b9e4-cc129c35b0bb.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Sales SalesOrderDetail' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ASUSEXPERTBOOK\SQLEXPRESS"),
+				    AdventureWorks2025 = Source{[Name="AdventureWorks2025"]}[Data],
+				    Sales_SalesOrderDetail = AdventureWorks2025{[Schema="Sales",Item="SalesOrderDetail"]}[Data]
+				in
+				    Sales_SalesOrderDetail
+
+	annotation PBI_ResultType = Table
+

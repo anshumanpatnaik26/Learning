@@ -1,0 +1,92 @@
+relationship 52deb488-b5ed-42ec-b445-c9d3081f0a3e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales SalesOrderHeader'.OrderDate
+	toColumn: LocalDateTable_367d5f58-81d9-45ca-9a84-d69cca0c8201.Date
+
+relationship 595a0307-7d7c-467e-8ff7-ae4140caf19c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales SalesOrderHeader'.DueDate
+	toColumn: LocalDateTable_58943af9-8d31-4453-8346-0150c12d3ba2.Date
+
+relationship 18822019-451a-4c5b-9593-c6fa147ebedd
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales SalesOrderHeader'.ShipDate
+	toColumn: LocalDateTable_a387e54b-d52b-4513-9244-214db6490205.Date
+
+relationship dade5174-8397-4e94-b254-b4d43a983d34
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales SalesOrderHeader'.ModifiedDate
+	toColumn: LocalDateTable_6cb030d6-d213-4df9-ad7d-28d09043e1c7.Date
+
+relationship 46ff188c-f454-40e3-8f55-e81e87546237
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales SalesOrderDetail'.ModifiedDate
+	toColumn: LocalDateTable_22637f17-08d6-400d-b9e4-cc129c35b0bb.Date
+
+relationship 4a5d42c8-9dd9-4ffe-b486-15a71051cdd5
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production Product'.SellStartDate
+	toColumn: LocalDateTable_454450f5-7a25-4159-92cc-6960ea1544e6.Date
+
+relationship 1de12375-75d5-43ee-b208-bb2244fe9d8a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production Product'.SellEndDate
+	toColumn: LocalDateTable_f209a95f-4906-4f2f-b6de-c1a6e95860f1.Date
+
+relationship 610a6a39-d734-4e50-9d8b-9dda232773ea
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production Product'.DiscontinuedDate
+	toColumn: LocalDateTable_52db88f5-a1b4-44fb-a1f8-4cc7d966ab57.Date
+
+relationship ec6b3f05-46e4-4837-a860-7b6107243987
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production Product'.ModifiedDate
+	toColumn: LocalDateTable_cb587434-3a4a-4431-a269-72ed662b36a0.Date
+
+relationship 6b66153c-8eef-42b1-832b-e80332173a86
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production ProductCategory'.ModifiedDate
+	toColumn: LocalDateTable_7c4b170b-c7c1-413a-82d0-75f8ac3fa533.Date
+
+relationship aae8fcd9-b572-47e9-b295-06164676d207
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Production ProductSubcategory'.ModifiedDate
+	toColumn: LocalDateTable_2bc06326-8706-4a4f-b819-11582831641d.Date
+
+relationship 36ca4632-e767-4656-8e83-8dce8e937ab7
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Sales Customer'.ModifiedDate
+	toColumn: LocalDateTable_277a4f5c-7e66-417d-b6b0-ab4ff7dd0304.Date
+
+relationship 54f416e9-6db3-48e0-980d-ef49c62af9aa
+	fromColumn: 'Sales SalesOrderHeader'.CustomerID
+	toColumn: 'Sales Customer'.CustomerID
+
+	annotation PBI_IsFromSource = FS
+
+relationship 3ca797c0-81d1-4dd7-b716-50fd2f8156b1
+	fromColumn: 'Sales SalesOrderDetail'.SalesOrderID
+	toColumn: 'Sales SalesOrderHeader'.SalesOrderID
+
+	annotation PBI_IsFromSource = FS
+
+relationship c3c47705-7a23-453c-a0ed-612e92ffb040
+	fromColumn: 'Production Product'.ProductSubcategoryID
+	toColumn: 'Production ProductSubcategory'.ProductSubcategoryID
+
+	annotation PBI_IsFromSource = FS
+
+relationship 0abb207f-097e-48db-a41b-d8461993d825
+	fromColumn: 'Production ProductSubcategory'.ProductCategoryID
+	toColumn: 'Production ProductCategory'.ProductCategoryID
+
+	annotation PBI_IsFromSource = FS
+
+relationship 7003b7cf-c259-2526-d4eb-f80a3395a25d
+	fromColumn: 'Sales SalesOrderDetail'.ProductID
+	toColumn: 'Production Product'.ProductID
+
+relationship 'Sales SalesOrderHeader_OrderDate_Calendar_Date'
+	fromColumn: 'Sales SalesOrderHeader'.OrderDate
+	toColumn: Calendar.Date
+

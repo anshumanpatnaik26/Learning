@@ -1,0 +1,56 @@
+table Calendar
+	lineageTag: 0ab2987a-d649-431b-adca-799decc8febf
+	dataCategory: Time
+
+	column Date
+		isUnique
+		lineageTag: 2e038f7d-7c9d-4603-9232-6eee127dfc16
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year = YEAR('Calendar'[Date])
+		dataType: int64
+		lineageTag: 75c31224-9ce2-4bf7-83fc-fd785ceb5c7c
+		summarizeBy: none
+
+	column 'Month Number' = MONTH('Calendar'[Date])
+		dataType: int64
+		lineageTag: 3b13dd01-19d4-4ca2-8e96-17524b74bfd3
+		summarizeBy: none
+
+	column 'Month Name' = FORMAT('Calendar'[Date], "MMMM")
+		dataType: string
+		lineageTag: c6e08030-237f-4066-8a59-e04ca56833cf
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+
+	column Quarter = QUARTER('Calendar'[Date])
+		dataType: int64
+		lineageTag: e9324aa2-3cd1-4883-809a-4629ed0e5f48
+		summarizeBy: none
+
+	column Year-Month = FORMAT('Calendar'[Date], "YYYY-MM")
+		dataType: string
+		lineageTag: 6d97c9ae-b490-49eb-8f2f-50ca9c4a85c0
+		summarizeBy: none
+
+	column 'Day of Week Number' = WEEKDAY('Calendar'[Date], 2)
+		dataType: int64
+		lineageTag: 2ab9a94e-caa3-4ced-b4dd-d1cbae6cfb3b
+		summarizeBy: none
+
+	column 'Day Name' = FORMAT('Calendar'[Date], "dddd")
+		dataType: string
+		lineageTag: 9b8ab94b-3cf7-4fd2-92b5-cd5a51750bfb
+		summarizeBy: none
+		sortByColumn: 'Day of Week Number'
+
+	column 'Week Number' = WEEKNUM('Calendar'[Date], 2)
+		dataType: int64
+		lineageTag: e08e68cb-2eba-465b-9543-0522d16983ed
+		summarizeBy: none
+
+	partition Calendar = calculated
+		mode: import
+		source = CALENDAR(DATE(2022,5,30), DATE(2025,6,29))
+

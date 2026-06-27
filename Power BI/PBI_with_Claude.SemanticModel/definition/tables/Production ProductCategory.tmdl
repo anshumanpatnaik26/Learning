@@ -1,0 +1,54 @@
+table 'Production ProductCategory'
+	lineageTag: 8a22bc08-d5e7-4d46-a56d-f02490c78cdf
+
+	column ProductCategoryID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e8f820f-9cfa-434c-8afe-e0ba8d9b633e
+		summarizeBy: none
+		sourceColumn: ProductCategoryID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 48440849-9cd1-409f-b1dc-0ca612705cbd
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column rowguid
+		dataType: string
+		lineageTag: c98308cd-aa72-40c8-a0a8-37f4c786bded
+		summarizeBy: none
+		sourceColumn: rowguid
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModifiedDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: caee7090-9869-4036-a938-26a4cb421b13
+		summarizeBy: none
+		sourceColumn: ModifiedDate
+
+		variation Variation
+			isDefault
+			relationship: 6b66153c-8eef-42b1-832b-e80332173a86
+			defaultHierarchy: LocalDateTable_7c4b170b-c7c1-413a-82d0-75f8ac3fa533.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Production ProductCategory' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases("ASUSEXPERTBOOK\SQLEXPRESS"),
+				    AdventureWorks2025 = Source{[Name="AdventureWorks2025"]}[Data],
+				    Production_ProductCategory = AdventureWorks2025{[Schema="Production",Item="ProductCategory"]}[Data]
+				in
+				    Production_ProductCategory
+
+	annotation PBI_ResultType = Table
+
