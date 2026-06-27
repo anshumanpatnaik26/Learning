@@ -22,7 +22,8 @@
                     "value": "POC FOR USING POWER BI WITH CLAUDE",
                     "textStyle": {
                       "fontWeight": "bold",
-                      "fontSize": "24pt"
+                      "fontSize": "24pt",
+                      "color": "#d64550"
                     }
                   }
                 ],
